@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_dependency">
+    <sp_dependency action="INSERT_OR_UPDATE">
+        <module/>
+        <name>DEV_Rev_State_Manipulators</name>
+        <page_load>false</page_load>
+        <sp_portals/>
+        <sys_class_name>sp_dependency</sys_class_name>
+        <sys_created_by>zdravko.verguilov</sys_created_by>
+        <sys_created_on>2021-08-10 13:03:08</sys_created_on>
+        <sys_id>a92291c707353010d44bf16c7c1ed011</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DEV_Rev_State_Manipulators</sys_name>
+        <sys_package display_value="Reversi" source="x_463716_dev_scope">8bac058307353010d44bf16c7c1ed0f6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Reversi">8bac058307353010d44bf16c7c1ed0f6</sys_scope>
+        <sys_update_name>sp_dependency_a92291c707353010d44bf16c7c1ed011</sys_update_name>
+        <sys_updated_by>zdravko.verguilov</sys_updated_by>
+        <sys_updated_on>2021-08-10 13:03:08</sys_updated_on>
+    </sp_dependency>
+</record_update>

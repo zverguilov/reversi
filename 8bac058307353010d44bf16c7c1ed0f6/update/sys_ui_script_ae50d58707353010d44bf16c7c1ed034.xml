@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_463716_dev_scope.DEV_Rev_Fn</name>
+        <script><![CDATA[function winCheck($scope, c) {
+	var totalScore = +$scope.pointsBlack + +$scope.pointsWhite;
+	
+	return totalScore == 64 ?
+		+$scope.pointsBlack > +$scope.pointsWhite ?
+		1 : +$scope.pointsWhite > +$scope.pointsBlack ?
+		2 : -1 : 0;
+}
+
+function turnSkipCheck($scope, c) {
+	var validMoves = '';
+
+	var start = 0;
+
+	while(start < 64) {		
+		if(c[start] !== 'black' && c[start] !== 'white') {
+			validMoves += getValidMoves(start, $scope, c) ? start + ' ' : '';
+		}
+
+		start++;
+	}
+	
+	$scope.validMoves = validMoves ? true : false;
+}
+
+function hasColor(value, $scope, c) {
+	return c[value] === $scope.color ? true : false;
+}
+
+function pointsCount(c) {
+	var start = 0;
+
+	var pointsBlack = 0;
+	var pointsWhite = 0;
+
+	while(start < 64) {
+		pointsBlack += c[start] === 'black' ? 1 : 0;
+		pointsWhite += c[start] === 'white' ? 1 : 0;
+
+		start++;
+	}
+
+	return {
+		black: pointsBlack,
+		white: pointsWhite
+	};
+}
+
+function diagonal(index, color, c) {
+	var dul = index % 8 == 0 || index - 9 < 0 ? index : index - 9;
+	var dur = (index - 7) % 8 == 0 || index - 7 < 0 ? index : index - 7;
+	var ddl = index % 8 == 0 || index + 7 >= 64 ? index : index + 7;
+	var ddr = (index + 9) % 8 == 0 || index + 9 >= 64 ? index : index + 9;
+
+	var dulValues = [];
+	var durValues = [];
+	var ddlValues = [];
+	var ddralues = [];
+
+	while(true) {		
+		dulValues.push(dul);
+
+		if(c[dul] !== color) {
+			break;
+		}
+
+		if(dul - 9 < 0) {
+			break;
+		} else if(dul % 8 == 0) {
+			break;
+		} else {
+			dul -= 9;
+		}
+	}
+
+	while(true) {
+		durValues.push(dur);
+
+		if(c[dur] !== color) {
+			break;
+		}
+
+		if(dur - 7 < 0 || (dur - 7) % 8 == 0) {
+			break;
+		} else {
+			dur -= 7;
+		}		
+	}
+
+	while(true) {
+		ddlValues.push(ddl);
+
+		if(c[ddl] !== color) {
+			break;
+		}
+
+		if(ddl + 7 >= 64 || ddl % 8 == 0) {
+			break;
+		} else {
+			ddl += 7;
+		}		
+	}
+
+	while(true) {
+		ddralues.push(ddr);
+
+		if(c[ddr] !== color) {
+			break;
+		}
+
+		if(ddr + 9 >= 64 || (ddr + 9) % 8 == 0) {
+			break;
+		} else {
+			ddr += 9;
+		}		
+	}
+
+	dul = dul == index ? null : dul;
+	dur = dur == index ? null : dur;
+	ddl = ddl == index ? null : ddl;
+	ddr = ddr == index ? null : ddr;
+
+	return {dul: dul,
+			dulValues: dulValues,
+			dur: dur,
+			durValues: durValues,
+			ddl: ddl,
+			ddlValues: ddlValues,
+			ddr: ddr,
+			ddrValues: ddralues};
+}
+
+function horizontal(index, color, c) {
+	var left = index % 8 == 0 ? index : index - 1;
+	var right = (index + 1) % 8 == 0 ? index : index + 1;
+
+	var leftValues = [];
+	var rightValues = [];
+
+	while(true) {
+		leftValues.push(left);
+
+		if(c[left] !== color) {
+			break;
+		}
+
+		if(left % 8 == 0) {
+			//left--;
+			//leftValues.push(left);
+			break;
+		} else {
+			left--;
+		}
+	}
+
+	while(true) {
+		rightValues.push(right);
+
+		if(c[right] !== color) {
+			break;
+		}
+
+		if((right + 1) % 8 == 0) {
+			break;
+		} else {
+			right++;
+		}				
+	}
+
+	left = left == index ? null : left;
+	right = right == index ? null : right;
+
+	return {left: left,
+			right: right,
+			rightValues: rightValues,
+			leftValues: leftValues};
+}
+
+function vertical(index, color, c) {
+	var up = index - 8 >= 0 ? index - 8 : index;
+	var down = index + 8 < 64 ? index + 8 : index;
+
+	var upValues = [];
+	var downValues = [];
+
+	while(up >= 0) {
+		upValues.push(up);
+
+		if(c[up] !== color) {
+			break;
+		}
+
+		if(up - 8 >= 0) {
+			up -= 8;
+		} else {
+			break;
+		}
+	}
+
+	while(down < 64) {
+		downValues.push(down);
+
+		if(c[down] !== color) {
+			break;
+		}
+
+		if(down + 8 < 64) {
+			down += 8;
+		} else {
+			break;
+		}
+	}
+
+	up = up == index ? null : up;
+	down = down == index ? null : down;
+
+	return {up: up,
+			down: down,
+			upValues: upValues,
+			downValues: downValues};
+}
+
+function getValidMoves(index, $scope, c) {
+
+	var color = $scope.color;
+
+	var enemyColor = $scope.color === 'white' ? 'black' : 'white';
+
+	var area = {};
+
+	var lockIndex = false;
+
+	var boxesD = diagonal(index, enemyColor, c);
+	var boxesV = vertical(index, enemyColor, c);
+	var boxesH = horizontal(index, enemyColor, c);
+
+	area.ul = index - 9 >= 0 && index % 8 != 0 ? index - 9 : null;
+	lockIndex = area.ul && boxesD.dulValues.length > 1 && hasColor(boxesD.dulValues[boxesD.dulValues.length-1], $scope, c) ? true : lockIndex;
+
+	area.up = index - 8 >= 0 ? index - 8 : null;
+	lockIndex = area.up && boxesV.upValues.length > 1 && hasColor(boxesV.upValues[boxesV.upValues.length-1], $scope, c) ? true : lockIndex;
+
+	area.ur = index - 7 >= 0 && (index + 1) % 8 != 0 ? index - 7 : null;
+	lockIndex = area.ur && boxesD.durValues.length > 1 && hasColor(boxesD.durValues[boxesD.durValues.length-1], $scope, c) ? true : lockIndex;
+
+	area.lf = index - 1 >= 0 && index % 8 != 0 ? index - 1 : null;
+	lockIndex = area.lf && boxesH.leftValues.length > 1 && hasColor(boxesH.leftValues[boxesH.leftValues.length-1], $scope, c) ? true : lockIndex;
+
+	area.rt = (index + 1) % 8 != 0 && index + 1 < 64 ? index + 1 : null;
+	lockIndex = area.rt && boxesH.rightValues.length > 1 && hasColor(boxesH.rightValues[boxesH.rightValues.length-1], $scope, c) ? true : lockIndex;
+
+	area.dl = index + 7 < 64 && index % 8 != 0 ? index + 7 : null;
+	lockIndex = area.dl && boxesD.ddlValues.length > 1 && hasColor(boxesD.ddlValues[boxesD.ddlValues.length-1], $scope, c) ? true : lockIndex;
+
+	area.dw = index + 8 < 64 ? index + 8 : null;
+	lockIndex = area.dw && boxesV.downValues.length > 1 && hasColor(boxesV.downValues[boxesV.downValues.length-1], $scope, c) ? true : lockIndex;
+
+	area.dr = index + 9 <64 && (index + 1) % 8 != 0 ? index + 9 : null;
+	lockIndex = area.dr && boxesD.ddrValues.length > 1 && hasColor(boxesD.ddrValues[boxesD.ddrValues.length-1], $scope, c) ? true : lockIndex;	
+	
+	if(index == 17)
+	console.log(index + ' ' + JSON.stringify(boxesD))
+
+	return lockIndex;
+}
+
+function move(index, $scope, c) {
+
+	if(getValidMoves(index, $scope, c)) {
+
+		c[index] = $scope.color;
+
+		var enemyColor = $scope.color === 'white' ? 'black' : 'white';
+
+
+		var verticals = vertical(index, enemyColor, c);
+
+		if((verticals.up || verticals.up === 0) && c[verticals.up] === $scope.color) {
+			verticals.upValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		if(verticals.down && c[verticals.down] === $scope.color) {
+			verticals.downValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		var horizontals = horizontal(index, enemyColor, c);
+
+		if((horizontals.left || horizontals.left === 0) && c[horizontals.left] === $scope.color) {
+
+			horizontals.leftValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		if(horizontals.right && c[horizontals.right] === $scope.color) {
+			horizontals.rightValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		var diagonals = diagonal(index, enemyColor, c);
+
+		if((diagonals.dul || diagonals.dul === 0) && c[diagonals.dul] === $scope.color) {
+			diagonals.dulValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		if(diagonals.dur && c[diagonals.dur] === $scope.color) {
+			diagonals.durValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		if(diagonals.ddl && c[diagonals.ddl] === $scope.color) {
+			diagonals.ddlValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		if(diagonals.ddr && c[diagonals.ddr] === $scope.color) {
+			diagonals.ddrValues.forEach(function (element, i) {
+				c[element] = $scope.color;
+			}, c);
+		}
+
+		var start = 0;
+
+		var layout = '';
+
+
+		while(start < 64) {
+
+			if(c[start] === $scope.color) {
+				layout += ', ' + start + ' ' + $scope.color;
+			} else if(c[start] === enemyColor) {
+				layout += ', ' + start + ' ' + enemyColor;
+			}
+
+			start ++;
+		}
+
+		$scope.layout = layout;
+
+		setState($scope, c);
+	}
+}]]></script>
+        <script_name>DEV_Rev_Fn</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>zdravko.verguilov</sys_created_by>
+        <sys_created_on>2021-08-10 12:55:04</sys_created_on>
+        <sys_id>ae50d58707353010d44bf16c7c1ed034</sys_id>
+        <sys_mod_count>128</sys_mod_count>
+        <sys_name>x_463716_dev_scope.DEV_Rev_Fn</sys_name>
+        <sys_package display_value="Reversi" source="x_463716_dev_scope">8bac058307353010d44bf16c7c1ed0f6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Reversi">8bac058307353010d44bf16c7c1ed0f6</sys_scope>
+        <sys_update_name>sys_ui_script_ae50d58707353010d44bf16c7c1ed034</sys_update_name>
+        <sys_updated_by>zdravko.verguilov</sys_updated_by>
+        <sys_updated_on>2021-08-20 09:05:59</sys_updated_on>
+        <ui_type>10</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

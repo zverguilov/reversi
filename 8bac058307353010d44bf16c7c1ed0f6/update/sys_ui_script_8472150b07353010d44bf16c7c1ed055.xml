@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>x_463716_dev_scope.DEv_Rev_State_Manipua</name>
+        <script><![CDATA[function sync($scope, c) {
+	c.server.update().then(function(res) {
+		$scope.game = res.game;
+		
+		$scope.winner = res.game.winnerName ? res.game.winnerName : $scope.winner;
+		
+		$scope.playerOne = $scope.playerOne ? $scope.playerOne : res.game.pOneName;
+		
+		$scope.playerTwo = $scope.playerTwo ? $scope.playerTwo : res.game.pTwoName;
+
+		$scope.progress = res.game.progress ? res.game.progress : '';
+
+		$scope.color = $scope.user.sys_id === res.game.player_one ?
+			'black' : $scope.user.sys_id === res.game.player_two ?
+			'white' : $scope.color;
+
+		$scope.usr = $scope.user.sys_id === res.game.player_one ?
+			1 : $scope.user.sys_id === res.game.player_two ?
+			2 : $scope.usr;
+
+		$scope.turn = res.game.turn;
+
+		$scope.pointsBlack = res.game.points_black;
+		
+		$scope.pointsWhite = res.game.points_white;
+
+		if($scope.progress) {
+			var boxes = $scope.progress.split(', ');
+
+			boxes.forEach(function(element) {
+				var values = element.split(' ');
+				c[values[0]] = values[1];
+			});
+		}
+		
+		switch(winCheck($scope, c)) {
+			case 1:
+				resign(2, $scope, c);
+				break;
+				
+			case 2:
+				resign(1, $scope, c);
+				break;
+				
+			case -1:
+				$scope.draw = true;
+				break;
+				
+			default:
+				break;
+		}
+		
+		turnSkipCheck($scope, c);
+	});
+}
+
+function setState($scope, c) {
+	c.data.method = 'setState';
+	c.data.layout = $scope.layout;
+	c.data.turn = $scope.turn == 1 ? 2 : 1;
+	c.data.points = pointsCount(c);
+
+	sync($scope, c);
+}
+
+function getState($scope, c) {
+	c.data.method = 'getState';
+
+	sync($scope, c);
+}
+
+function skip($scope, c) {
+	c.data.method = 'skipTurn';
+	c.data.turn = $scope.turn == 1 ? 2 : 1;
+	
+	sync($scope, c);
+}
+
+function resign(value, $scope, c) {
+	c.data.method = 'resignGame';
+	c.data.player = value == 1 ? 'player_two' : 'player_one';
+	
+	sync($scope, c);
+}]]></script>
+        <script_name>DEv_Rev_State_Manipuators</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>zdravko.verguilov</sys_created_by>
+        <sys_created_on>2021-08-10 13:04:08</sys_created_on>
+        <sys_id>8472150b07353010d44bf16c7c1ed055</sys_id>
+        <sys_mod_count>34</sys_mod_count>
+        <sys_name>x_463716_dev_scope.DEv_Rev_State_Manipua</sys_name>
+        <sys_package display_value="Reversi" source="x_463716_dev_scope">8bac058307353010d44bf16c7c1ed0f6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Reversi">8bac058307353010d44bf16c7c1ed0f6</sys_scope>
+        <sys_update_name>sys_ui_script_8472150b07353010d44bf16c7c1ed055</sys_update_name>
+        <sys_updated_by>zdravko.verguilov</sys_updated_by>
+        <sys_updated_on>2021-08-18 21:55:30</sys_updated_on>
+        <ui_type>10</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Reversi Game" max_length="40" name="x_463716_dev_scope_reversi_game" sizeclass="29" type="collection">
+        <element label="Player One" max_length="32" name="player_one" reference="sys_user" type="reference"/>
+        <element label="Player Two" max_length="32" name="player_two" reference="sys_user" type="reference"/>
+        <element default="2" label="Points Black" max_length="40" name="points_black" type="integer"/>
+        <element default="2" label="Points White" max_length="40" name="points_white" type="integer"/>
+        <element default="27 white, 28 black, 35 black, 36 white" label="Progress" max_length="800" name="progress" type="string"/>
+        <element choice="3" default="1" label="Turn" max_length="40" name="turn" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="1" sequence="1" value="1"/>
+                <element inactive_on_update="false" label="2" sequence="2" value="2"/>
+            </choice>
+        </element>
+        <element label="Winner" max_length="32" name="winner" reference="sys_user" type="reference"/>
+        <index name="index">
+            <element name="winner"/>
+        </index>
+        <index name="index2">
+            <element name="player_one"/>
+        </index>
+        <index name="index3">
+            <element name="player_two"/>
+        </index>
+    </element>
+</database>

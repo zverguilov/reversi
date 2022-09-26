@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_js_include">
+    <sp_js_include action="INSERT_OR_UPDATE">
+        <display_name>DEV_Rev_State_Manipulators</display_name>
+        <source>local</source>
+        <sys_class_name>sp_js_include</sys_class_name>
+        <sys_created_by>zdravko.verguilov</sys_created_by>
+        <sys_created_on>2021-08-10 13:04:11</sys_created_on>
+        <sys_id>1b52d10b07353010d44bf16c7c1ed079</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DEV_Rev_State_Manipulators</sys_name>
+        <sys_package display_value="Reversi" source="x_463716_dev_scope">8bac058307353010d44bf16c7c1ed0f6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Reversi">8bac058307353010d44bf16c7c1ed0f6</sys_scope>
+        <sys_ui_script display_value="x_463716_dev_scope.DEv_Rev_State_Manipua">8472150b07353010d44bf16c7c1ed055</sys_ui_script>
+        <sys_update_name>sp_js_include_1b52d10b07353010d44bf16c7c1ed079</sys_update_name>
+        <sys_updated_by>zdravko.verguilov</sys_updated_by>
+        <sys_updated_on>2021-08-10 13:04:11</sys_updated_on>
+        <url/>
+    </sp_js_include>
+</record_update>

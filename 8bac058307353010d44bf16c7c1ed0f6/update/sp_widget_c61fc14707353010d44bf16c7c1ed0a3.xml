@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function($scope) {
+	var c = this;
+		
+	getState($scope, c);
+
+	setInterval(function() {
+		if($scope.turn != $scope.usr &&
+			 !$scope.winner ||
+			 !$scope.playerTwo) {
+			getState($scope, c);
+		}
+	}, 1000);
+
+	$scope.frame = new Array(64);
+
+	c.move = function(index) {
+		move(index, $scope, c);
+	}
+	
+	c.skip = function() {
+		skip($scope, c);
+	}
+	
+	c.resign = function(value) {
+		if(confirm('Are you sure?')) {
+			resign(value, $scope, c);
+		}
+	}
+};]]></client_script>
+        <controller_as>c</controller_as>
+        <css>@import url('https://fonts.googleapis.com/css2?family=Righteous&amp;display=swap');&#13;
+&#13;
+#game {&#13;
+  display: flex;&#13;
+}&#13;
+&#13;
+#main {&#13;
+  display: grid;&#13;
+  grid-template-columns: repeat(8, 7rem);&#13;
+  grid-template-rows: repeat(8, 7rem);&#13;
+  margin: 2rem;&#13;
+  width: 58rem;&#13;
+  height: 58rem;&#13;
+  padding: 1rem;&#13;
+  border-radius: 10px;&#13;
+  background-image: url("wood.jpg");&#13;
+  background-size: cover;&#13;
+  box-shadow: 5px 5px 10px black;&#13;
+}&#13;
+&#13;
+.stats {&#13;
+  display: flex;&#13;
+  flex-direction: column;&#13;
+  margin: 5rem 0 5rem 0;&#13;
+  width: 28rem;&#13;
+}&#13;
+&#13;
+#statsRight {&#13;
+	justify-content: flex-end;&#13;
+}&#13;
+&#13;
+.box {&#13;
+  border: .1px solid #855E42;&#13;
+  display: flex;&#13;
+  justify-content: center;&#13;
+  align-items: center;&#13;
+}&#13;
+&#13;
+.chip {&#13;
+  border-radius: 5rem;&#13;
+  width: 6rem;&#13;
+  height: 6rem;&#13;
+  padding: 1rem;&#13;
+}&#13;
+&#13;
+.black {&#13;
+  background: radial-gradient(circle at center, black 50%, lightgrey 100%);&#13;
+  box-shadow: 1px 3px 10px black;&#13;
+}&#13;
+&#13;
+.white {&#13;
+  background: radial-gradient(circle at center, white 50%, grey 100%);&#13;
+  box-shadow: 1px 3px 10px black;&#13;
+}&#13;
+&#13;
+.locked, .white, .black {&#13;
+  pointer-events: none;&#13;
+}&#13;
+&#13;
+h2 {&#13;
+  font-family: Righteous;&#13;
+  text-align: center;&#13;
+  //color: #717171;&#13;
+  text-shadow: 1.5px 1.5px 3px grey;&#13;
+  margin: 0;&#13;
+  padding: 0 2rem 0 2rem;&#13;
+}&#13;
+&#13;
+h1 {&#13;
+  font-family: Righteous;&#13;
+  font-size: 2em;&#13;
+  color: darkgrey;&#13;
+  text-align: center;&#13;
+  mix-blend-mode: difference;&#13;
+  margin: .4rem;&#13;
+}&#13;
+&#13;
+#p1 {&#13;
+  display: flex;&#13;
+  margin: 5rem 0 0 0;&#13;
+&#13;
+}&#13;
+&#13;
+#p2 {&#13;
+  display: flex;&#13;
+  margin: 0 0 5rem 0;&#13;
+}&#13;
+&#13;
+#buttons {&#13;
+  display: flex;&#13;
+  flex-direction: column;&#13;
+  justify-content: center;&#13;
+}&#13;
+&#13;
+.pName {&#13;
+  width: 65%;&#13;
+}&#13;
+&#13;
+i {&#13;
+  font-size: 3rem;&#13;
+}&#13;
+&#13;
+#skipTurn, #resignGame {&#13;
+  font-family: Righteous;&#13;
+  border: none;&#13;
+  border-shadow: none;&#13;
+  border-radius: 5px;&#13;
+  color: #fff;&#13;
+  padding: 5px 10px;&#13;
+  display: block;&#13;
+  margin: 10px auto;&#13;
+}&#13;
+&#13;
+#resignGame {&#13;
+	background-color: crimson;&#13;
+}&#13;
+&#13;
+#resignGame:hover {&#13;
+	background-color: #B01030;&#13;
+}&#13;
+&#13;
+#skipTurn {&#13;
+  background-color: #218376;&#13;
+}&#13;
+&#13;
+#skipTurn:hover {&#13;
+  background-color: #155B51;&#13;
+}&#13;
+&#13;
+#win {&#13;
+  position: fixed;&#13;
+  top: 0;&#13;
+  left: 0;&#13;
+  background-color: rgba(0, 0, 0, .8);&#13;
+  width: 100%;&#13;
+  height: 100%;&#13;
+  pointer-events: none;&#13;
+}&#13;
+&#13;
+#winBanner {&#13;
+	margin: 20%;&#13;
+  font-size: 6rem;&#13;
+}&#13;
+&#13;
+/*#win {&#13;
+	width: 50px;&#13;
+  height: 50px;&#13;
+  background-color: crimson;&#13;
+}*/&#13;
+&#13;
+.chip-status {&#13;
+  box-shadow:&#13;
+    0 0 6px 3px #fff,  /* inner white */&#13;
+    0 0 10px 6px #0FFF50, /* middle magenta */&#13;
+    0 0 14px 9px #0ff; /* outer cyan */&#13;
+}&#13;
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>reversi</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+  
+}]]></link>
+        <name>Reversi</name>
+        <option_schema/>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[(function() {	
+
+	data.user = gs.getUserID();
+	data.gameID = $sp.getParameter('game_id');
+	data.mode = $sp.getParameter('mode');
+	data.game = {};
+
+	var join = function() {		
+		var value = data.mode == 'join' ? 'player_two' :
+		data.mode == 'create' ? 'player_one' : null;
+
+		var game = new GlideRecord('x_463716_dev_scope_reversi_game');
+		game.get(data.gameID);
+		game.setValue(value, data.user);
+
+		game.update();
+	}
+
+	if(!input) {
+		join();
+	}
+
+	var getState = function() {
+		var game = new GlideRecord('x_463716_dev_scope_reversi_game');
+
+		game.get(data.gameID);
+
+		var obj = {};
+
+		for(var e in game) {
+			if(game[e]) {
+				data.game[e] = game[e].toString();
+			}
+		}
+
+		data.game.pOneName = game.player_one.name.toString();
+		data.game.pTwoName = game.player_two ?
+			game.player_two.name.toString() : null;
+		data.game.winnerName = game.winner ?
+			game.winner.name.toString() : null;
+	}
+
+	var setState = function(layout, turn, points) {
+		var game = new GlideRecord('x_463716_dev_scope_reversi_game');
+
+		game.get(data.gameID);		
+		game.setValue('progress', layout);
+		game.setValue('turn', turn);
+		game.setValue('points_black', points.black);
+		game.setValue('points_white', points.white);
+
+		game.update();		
+	}
+
+	var skipTurn = function(turn) {
+		var game = new GlideRecord('x_463716_dev_scope_reversi_game');
+
+		game.get(data.gameID);		
+		game.setValue('turn', turn);
+
+		game.update();		
+	}
+
+	var resignGame = function(player) {		
+		var game = new GlideRecord('x_463716_dev_scope_reversi_game');
+
+		game.get(data.gameID);		
+		game.setValue('winner', game[player]);
+
+		game.update();
+	}
+
+	if(input) {
+		if(input.method === 'getState') {
+			getState();
+		}
+
+		if(input.method === 'setState') {
+			setState(input.layout, input.turn, input.points);
+		}
+
+		if(input.method === 'skipTurn') {
+			skipTurn(input.turn);
+		}
+
+		if(input.method === 'resignGame') {
+			resignGame(input.player);
+		}
+	}
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>zdravko.verguilov</sys_created_by>
+        <sys_created_on>2021-08-10 12:49:08</sys_created_on>
+        <sys_id>c61fc14707353010d44bf16c7c1ed0a3</sys_id>
+        <sys_mod_count>278</sys_mod_count>
+        <sys_name>Reversi</sys_name>
+        <sys_package display_value="Reversi" source="x_463716_dev_scope">8bac058307353010d44bf16c7c1ed0f6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Reversi">8bac058307353010d44bf16c7c1ed0f6</sys_scope>
+        <sys_update_name>sp_widget_c61fc14707353010d44bf16c7c1ed0a3</sys_update_name>
+        <sys_updated_by>zdravko.verguilov</sys_updated_by>
+        <sys_updated_on>2022-06-01 07:09:04</sys_updated_on>
+        <template><![CDATA[<div id="win"
+     ng-if="winner">
+  <h1 ng-bind-html="winner + ' has won!'"
+      id="winBanner"></h1>
+</div>
+<div id="game">
+  <div class="stats">
+    <div id="p2">
+      <div class="chip"
+           ng-class="{ 'white': color == 'black',
+                     'black': color == 'white',
+                     'locked': true,
+                     'chip-status': usr != turn}">
+        <h1 ng-if="usr == 2"
+            ng-bind-html="pointsBlack"></h1>
+        <h1 ng-if="usr == 1"
+            ng-bind-html="pointsWhite"></h1>
+      </div>
+      <h2 ng-if="usr == 2"
+          ng-bind-html="playerOne"
+          class="pName"></h2>
+      <h2 ng-if="usr == 1"
+          ng-bind-html="playerTwo"
+          class="pName"></h2>
+    </div>
+  </div>
+  <div id="main">
+    <div class="box"
+         ng-repeat="elements in frame track by $index"
+         id="{{$index}}">
+      <div class="chip"
+           ng-class="{ 'white': c[$index] == 'white',
+                     'black': c[$index] == 'black',
+                     'locked': usr != turn ||
+                     c[$index] == 'locked'}"
+           ng-click="c.move($index)">
+      </div>
+    </div>
+  </div>
+
+  <div class="stats"
+       id="statsRight">
+    <div id="buttons">
+      <div>
+        <input type="button"
+               ng-click="c.resign(usr)"
+               id="resignGame"
+               value="Resign game"/>  
+      </div>
+      <div>
+        <input type="button"
+               ng-click="c.skip()"
+               ng-if="usr == turn &&
+                      !validMoves"
+               id="skipTurn"
+               value="Skip turn"/>   
+      </div>
+
+    </div>
+    <div id="p1">
+      <h2 ng-if="usr == 1"
+          ng-bind-html="playerOne"
+          class="pName"></h2>
+      <h2 ng-if="usr == 2"
+          ng-bind-html="playerTwo"
+          class="pName"></h2>
+      <div class="chip"
+           ng-class="{ 'white': color == 'white',
+                     'black': color == 'black',
+                     'locked': true,
+                     'chip-status': usr == turn}">
+        <h1 ng-if="usr == 1"
+            ng-bind-html="pointsBlack"></h1>
+        <h1 ng-if="usr == 2"
+            ng-bind-html="pointsWhite"></h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+]]></template>
+    </sp_widget>
+</record_update>

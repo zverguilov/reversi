@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="player_two" label="Player Two" language="en" table="x_463716_dev_scope_reversi_game">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>player_two</element>
+            <help/>
+            <hint/>
+            <label>Player Two</label>
+            <language>en</language>
+            <name>x_463716_dev_scope_reversi_game</name>
+            <plural>Player Twos</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>zdravko.verguilov</sys_created_by>
+            <sys_created_on>2021-08-10 12:46:20</sys_created_on>
+            <sys_id>4d7e8d0707353010d44bf16c7c1ed0ab</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Player Two</sys_name>
+            <sys_package display_value="Reversi" source="x_463716_dev_scope">8bac058307353010d44bf16c7c1ed0f6</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Reversi">8bac058307353010d44bf16c7c1ed0f6</sys_scope>
+            <sys_update_name>sys_documentation_x_463716_dev_scope_reversi_game_player_two_en</sys_update_name>
+            <sys_updated_by>zdravko.verguilov</sys_updated_by>
+            <sys_updated_on>2021-08-10 12:46:20</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <css>.page {&#13;
+  //backdrop-filter: blur(3px);&#13;
+}&#13;
+&#13;
+body::after {&#13;
+  content: "";&#13;
+  background: url('arena-sketch.jpg');&#13;
+  background-repeat: no-repeat;&#13;
+  background-size: cover;&#13;
+  background-position: center;&#13;
+  //opacity: 0.6;&#13;
+  top: 0;&#13;
+  left: 0;&#13;
+  bottom: 0;&#13;
+  right: 0;&#13;
+  position: absolute;&#13;
+  z-index: -1;   &#13;
+}</css>
+        <draft>false</draft>
+        <dynamic_title_structure/>
+        <id>reversi</id>
+        <internal>false</internal>
+        <omit_watcher>false</omit_watcher>
+        <public>false</public>
+        <roles/>
+        <seo_script/>
+        <short_description/>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>zdravko.verguilov</sys_created_by>
+        <sys_created_on>2021-08-10 12:50:28</sys_created_on>
+        <sys_id>515f4d4707353010d44bf16c7c1ed063</sys_id>
+        <sys_mod_count>13</sys_mod_count>
+        <sys_name>reversi</sys_name>
+        <sys_package display_value="Reversi" source="x_463716_dev_scope">8bac058307353010d44bf16c7c1ed0f6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Reversi">8bac058307353010d44bf16c7c1ed0f6</sys_scope>
+        <sys_update_name>sp_page_515f4d4707353010d44bf16c7c1ed063</sys_update_name>
+        <sys_updated_by>zdravko.verguilov</sys_updated_by>
+        <sys_updated_on>2022-06-01 07:04:53</sys_updated_on>
+        <title>Reversi</title>
+        <use_seo_script>false</use_seo_script>
+    </sp_page>
+    <sys_translated_text action="delete_multiple" query="documentkey=515f4d4707353010d44bf16c7c1ed063"/>
+</record_update>
